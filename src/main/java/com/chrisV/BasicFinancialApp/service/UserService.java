@@ -11,11 +11,25 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    UserRepo repo;
+    private UserRepo repo;
+
+    public User createUser(User user) {
+        return repo.save(user);
+    }
 
     public List<User> getAllUsers() {
         return repo.findAll();
     }
+
+    public User getUserById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+
+
+
+
+
 
 
 
