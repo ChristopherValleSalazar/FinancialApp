@@ -1,5 +1,6 @@
 package com.chrisV.BasicFinancialApp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,6 @@ public class Account {
     //handle in frontend later
     private String currency;
 
-    @Column(unique = true)
     private String bankName;
 
     @Column(unique = true)
@@ -33,10 +33,13 @@ public class Account {
 
     @Column(unique = true)
     private Long routingNumber;
+
     private String notes;
     private String nickname;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @Column(nullable = false)
