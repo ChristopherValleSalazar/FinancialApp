@@ -1,8 +1,6 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.UserUpdateEmailDTO;
-import com.chrisV.BasicFinancialApp.dto.UserUpdateNameDTO;
-import com.chrisV.BasicFinancialApp.dto.UserUpdateUsernameDTO;
+import com.chrisV.BasicFinancialApp.dto.*;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.User;
@@ -30,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        UserResponseDTO user = userService.getUserById(id);
 
         if(user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,9 +39,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
+        UserResponseDTO createUser = userService.createUser(user);
+        return new ResponseEntity<>(createUser, HttpStatus.CREATED);
     }
 
     @PostMapping("/{userId}/accounts")

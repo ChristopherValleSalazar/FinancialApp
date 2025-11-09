@@ -1,8 +1,7 @@
 package com.chrisV.BasicFinancialApp.service;
 
-import com.chrisV.BasicFinancialApp.dto.UserUpdateEmailDTO;
-import com.chrisV.BasicFinancialApp.dto.UserUpdateUsernameDTO;
-import com.chrisV.BasicFinancialApp.dto.UserUpdateNameDTO;
+import com.chrisV.BasicFinancialApp.dto.*;
+import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
@@ -18,16 +17,28 @@ public class UserService {
     @Autowired
     private UserRepo repo;
 
-    public User createUser(User user) {
-        return repo.save(user);
+    public UserResponseDTO createUser(UserRequestDTO user) {
+        if(repo.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists: " + user.getUsername());
+        }
+
+        User savingUser = UserMapper.toEntityFromRequestDTO(user);
+        repo.save(savingUser);
+        return UserMapper.fromEntityToResponseDTO(savingUser);
     }
 
     public List<User> getAllUsers() {
         return repo.findAll();
     }
 
-    public User getUserById(Long id) {
-        return repo.findById(id).orElse(null);
+    public UserResponseDTO getUserById(Long id) {
+        User user = repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(user == null) {
+            return null;
+        }
+
+        return UserMapper.fromEntityToResponseDTO(user);
     }
 
     public User updateOnlyNameUser(UserUpdateNameDTO userUpdate, Long id) {
@@ -42,14 +53,14 @@ public class UserService {
     }
 
     public User addAccountToUser(Long userId, Account account) {
-        User user = getUserById(userId);
+        User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         if(user == null) {
             return null;
         }
 
         // set bidirectional relationship
         account.setUser(user);
-        user.getAccounts().add(account);
+        user.addAccount(account);
         return repo.save(user);
     }
 
