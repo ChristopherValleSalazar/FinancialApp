@@ -1,6 +1,7 @@
 package com.chrisV.BasicFinancialApp.service;
 
 import com.chrisV.BasicFinancialApp.dto.*;
+import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.User;
@@ -27,8 +28,15 @@ public class UserService {
         return UserMapper.fromEntityToResponseDTO(savingUser);
     }
 
-    public List<User> getAllUsers() {
-        return repo.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        List<UserResponseDTO> userDTOS = repo.findAll().stream().
+                map(UserMapper::fromEntityToResponseDTO).toList();
+
+        if(userDTOS.isEmpty()) {
+            return null;
+        }
+
+        return userDTOS;
     }
 
     public UserResponseDTO getUserById(Long id) {
@@ -37,7 +45,6 @@ public class UserService {
         if(user == null) {
             return null;
         }
-
         return UserMapper.fromEntityToResponseDTO(user);
     }
 
@@ -52,18 +59,17 @@ public class UserService {
         return repo.save(existingUser);
     }
 
-    public User addAccountToUser(Long userId, Account account) {
+    public AccountResponseDTO addAccountToUser(Long userId, AccountRequestDTO account) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-        if(user == null) {
-            return null;
-        }
+
+        Account accountEntity = AccountMapper.fromRequestDTOToEntity(account);
 
         // set bidirectional relationship
-        account.setUser(user);
-        user.addAccount(account);
-        return repo.save(user);
+        accountEntity.setUser(user);
+        user.addAccount(accountEntity);
+        repo.save(user);
+        return AccountMapper.fromEntityToResponseDTO(accountEntity);
     }
-
 
     public User updateOnlyUsernameUser(UserUpdateUsernameDTO userUpdate, Long id) {
         Optional<User> existingUser = repo.findById(id);

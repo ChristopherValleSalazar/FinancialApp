@@ -20,10 +20,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         //logic
-        List<User> users = userService.getAllUsers();
-        System.out.println(users);
+        List<UserResponseDTO> users = userService.getAllUsers();
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -31,11 +31,7 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         UserResponseDTO user = userService.getUserById(id);
 
-        if(user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
-        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -45,11 +41,11 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/accounts")
-    public ResponseEntity<User> addAccountToUser(@PathVariable Long userId, @RequestBody Account account) {
-        User user = userService.addAccountToUser(userId, account);
+    public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody AccountRequestDTO account) {
+        AccountResponseDTO dto = userService.addAccountToUser(userId, account);
 
-        //return updated user with account
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        //return account without sensitive info
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @PatchMapping("/update-name/{id}")
