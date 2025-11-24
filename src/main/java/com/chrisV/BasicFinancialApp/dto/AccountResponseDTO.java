@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,7 +20,7 @@ public class AccountResponseDTO {
     public AccountResponseDTO() {
     }
 
-    public AccountResponseDTO(String accountType, BigDecimal balance, String currency, BigDecimal interestRate, Boolean isActive, String bankName, String notes, String nickname, LocalDateTime updatedAt) {
+    public AccountResponseDTO(String accountType, BigDecimal balance, String currency, BigDecimal interestRate, Boolean isActive, String bankName, String notes, String nickname) {
         this.accountType = accountType;
         this.balance = balance;
         this.currency = currency;
