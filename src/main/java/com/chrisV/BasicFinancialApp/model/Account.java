@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -28,12 +28,6 @@ public class Account {
 
     private String bankName;
 
-    @Column(unique = true)
-    private Long accountNumber;
-
-    @Column(unique = true)
-    private Long routingNumber;
-
     private String notes;
     private String nickname;
 
@@ -45,10 +39,10 @@ public class Account {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
     private BigDecimal interestRate;
     private BigDecimal balance;
