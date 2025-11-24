@@ -18,7 +18,6 @@ public class AccountResponseDTO {
     private String bankName;
     private String notes;
     private String nickname;
-    private LocalDateTime updatedAt;
 
     public AccountResponseDTO() {
     }
@@ -32,6 +31,5 @@ public class AccountResponseDTO {
         this.bankName = bankName;
         this.notes = notes;
         this.nickname = nickname;
-        this.updatedAt = updatedAt;
     }
 }

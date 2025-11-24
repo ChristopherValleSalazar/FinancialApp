@@ -13,7 +13,6 @@ public class AccountMapper {
         dto.setCurrency(account.getCurrency());
         dto.setInterestRate(account.getInterestRate());
         dto.setIsActive(account.getIsActive());
-        dto.setUpdatedAt(account.getUpdatedAt());
         dto.setBankName(account.getBankName());
         dto.setNotes(account.getNotes());
         dto.setNickname(account.getNickname());
@@ -31,8 +30,6 @@ public class AccountMapper {
         account.setBankName(dto.getBankName());
         account.setNotes(dto.getNotes());
         account.setNickname(dto.getNickname());
-        account.setCreatedAt(dto.getCreatedAt());
-        account.setUpdatedAt(dto.getUpdatedAt());
         return account;
     }
 
