@@ -3,7 +3,7 @@ package com.chrisV.BasicFinancialApp.controller;
 import com.chrisV.BasicFinancialApp.dto.UserLoginDTO;
 import com.chrisV.BasicFinancialApp.dto.UserRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.UserResponseDTO;
-import com.chrisV.BasicFinancialApp.service.UserService;
+import com.chrisV.BasicFinancialApp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserLoginDTO userLogin) {
-        UserResponseDTO user = userService.userLogin(userLogin);
+        UserResponseDTO user = authService.userLogin(userLogin);
 
         if(user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
-        UserResponseDTO createUser = userService.createUser(user);
+        UserResponseDTO createUser = authService.createUser(user);
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
     }
 }

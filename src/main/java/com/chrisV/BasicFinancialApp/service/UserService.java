@@ -1,13 +1,10 @@
 package com.chrisV.BasicFinancialApp.service;
 
 import com.chrisV.BasicFinancialApp.dto.*;
-import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,30 +15,6 @@ public class UserService {
 
     @Autowired
     private UserRepo repo;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public UserResponseDTO createUser(UserRequestDTO user) {
-        if(repo.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists: " + user.getUsername());
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword())); //hash with BCrypt before saving
-
-        User savingUser = UserMapper.toEntityFromRequestDTO(user);
-        repo.save(savingUser);
-        return UserMapper.fromEntityToResponseDTO(savingUser);
-    }
-
-    public UserResponseDTO userLogin(UserLoginDTO userLogin) {
-        User existingUser = repo.findByUsername(userLogin.getUsername());
-        String passwordToCheck = userLogin.getPassword();
-
-        if(passwordEncoder.matches(passwordToCheck, existingUser.getPassword())) {
-            return UserMapper.fromEntityToResponseDTO(existingUser);
-        }
-        return null;
-    }
 
     public List<UserResponseDTO> getAllUsers() {
         List<UserResponseDTO> userDTOS = repo.findAll().stream().
@@ -73,17 +46,6 @@ public class UserService {
         return repo.save(existingUser);
     }
 
-    public AccountResponseDTO addAccountToUser(Long userId, AccountRequestDTO account) {
-        User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-        Account accountEntity = AccountMapper.fromRequestDTOToEntity(account);
-
-        // set bidirectional relationship
-        accountEntity.setUser(user);
-        user.addAccount(accountEntity);
-        repo.save(user);
-        return AccountMapper.fromEntityToResponseDTO(accountEntity);
-    }
 
     public User updateOnlyUsernameUser(UserUpdateUsernameDTO userUpdate, Long id) {
         Optional<User> existingUser = repo.findById(id);
