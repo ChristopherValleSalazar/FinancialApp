@@ -99,11 +99,6 @@ Contributions, bug reports, and feature requests are welcome. If you plan change
 2. Create a branch for your feature/fix
 3. Open a pull request describing the change
 
-Add a LICENSE file to clarify license terms if you want others to reuse the code.
-
-## License
-No license specified in the repository. If you want others to use or contribute, add a license (for example, MIT, Apache-2.0, etc.).
-
 ## Acknowledgements
 - Spring Boot and the Spring ecosystem
 - PostgreSQL
