@@ -15,7 +15,6 @@ public class UserResponseDTO {
     private String lastName;
     private String email;
 
-
     public UserResponseDTO() {}
     public UserResponseDTO(Long id, String firstName, String lastName, String email) {
         this.id = id;
