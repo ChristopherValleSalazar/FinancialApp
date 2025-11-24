@@ -2,7 +2,6 @@ package com.chrisV.BasicFinancialApp.controller;
 
 import com.chrisV.BasicFinancialApp.dto.*;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin("http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -25,6 +25,17 @@ public class UserController {
         List<UserResponseDTO> users = userService.getAllUsers();
 
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDTO> userLogin(@RequestBody UserLoginDTO userLogin) {
+        UserResponseDTO user = userService.userLogin(userLogin);
+
+        if(user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
