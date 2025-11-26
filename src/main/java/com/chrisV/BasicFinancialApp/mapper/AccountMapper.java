@@ -11,7 +11,7 @@ public class AccountMapper {
         dto.setAccountType(account.getAccountType());
         dto.setBalance(account.getBalance());
         dto.setCurrency(account.getCurrency());
-        dto.setInterestRate(account.getInterestRate());
+//        dto.setInterestRate(account.getInterestRate());
         dto.setIsActive(account.getIsActive());
         dto.setBankName(account.getBankName());
         dto.setNotes(account.getNotes());
@@ -25,7 +25,7 @@ public class AccountMapper {
         account.setAccountType(dto.getAccountType());
         account.setBalance(dto.getBalance());
         account.setCurrency(dto.getCurrency());
-        account.setInterestRate(dto.getInterestRate());
+//        account.setInterestRate(dto.getInterestRate());
         account.setIsActive(dto.getIsActive());
         account.setBankName(dto.getBankName());
         account.setNotes(dto.getNotes());

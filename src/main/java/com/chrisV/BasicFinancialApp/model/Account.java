@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,7 +45,5 @@ public class Account {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    private BigDecimal interestRate;
     private BigDecimal balance;
-
 }
