@@ -2,6 +2,7 @@ package com.chrisV.BasicFinancialApp.controller;
 
 import com.chrisV.BasicFinancialApp.dto.CheckingAccountRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.AccountResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.CheckingAccountResponseDTO;
 import com.chrisV.BasicFinancialApp.dto.CreateSavingsDTO;
 import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
@@ -32,11 +33,17 @@ public class AccountController {
     @Autowired
     private SavingsAccountRepo savingsAccountRepo;
 
-    @PostMapping("/checking/{userId}")
+    @GetMapping("/{accountId}/checking")
+    public ResponseEntity<CheckingAccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
+        CheckingAccountResponseDTO dto = accountService.getCheckingAccountInfo(accountId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping("/{userId}/checking")
     public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody CheckingAccountRequestDTO account) {
         AccountResponseDTO dto = accountService.addCheckingAccountToUser(userId, account);
         //return account without sensitive info
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/savings")
@@ -52,5 +59,4 @@ public class AccountController {
 
         return new ResponseEntity<>(AccountMapper.fromEntityToResponseDTO(account), HttpStatus.CREATED);
     }
-
 }
