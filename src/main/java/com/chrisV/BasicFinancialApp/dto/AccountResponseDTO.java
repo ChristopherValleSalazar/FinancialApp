@@ -1,5 +1,6 @@
 package com.chrisV.BasicFinancialApp.dto;
 
+import com.chrisV.BasicFinancialApp.model.AccountType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +9,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class AccountResponseDTO {
-    private String accountType;
+    private AccountType accountType;
     private BigDecimal balance;
-    private String currency;
-    private BigDecimal interestRate;
-    private Boolean isActive;
     private String bankName;
     private String notes;
     private String nickname;
@@ -20,12 +18,9 @@ public class AccountResponseDTO {
     public AccountResponseDTO() {
     }
 
-    public AccountResponseDTO(String accountType, BigDecimal balance, String currency, BigDecimal interestRate, Boolean isActive, String bankName, String notes, String nickname) {
+    public AccountResponseDTO(AccountType accountType, BigDecimal balance, String bankName, String notes, String nickname) {
         this.accountType = accountType;
         this.balance = balance;
-        this.currency = currency;
-        this.interestRate = interestRate;
-        this.isActive = isActive;
         this.bankName = bankName;
         this.notes = notes;
         this.nickname = nickname;

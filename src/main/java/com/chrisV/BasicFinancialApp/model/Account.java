@@ -22,12 +22,14 @@ public class Account {
     private Long id;
 
     //make into ENUM later
-    private String accountType;
-
-    //handle in frontend later
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+//
+//    //handle in frontend later
+//    private String currency;
 
     private String bankName;
+    private BigDecimal balance;
 
     private String notes;
     private String nickname;
@@ -37,13 +39,9 @@ public class Account {
     @JsonBackReference
     private User user;
 
-    @Column(nullable = false)
-    private Boolean isActive;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    private BigDecimal balance;
 }
