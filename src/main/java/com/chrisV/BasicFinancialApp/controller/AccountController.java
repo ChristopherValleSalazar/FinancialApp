@@ -26,15 +26,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private AccountRepo repo;
-
-    @Autowired
-    SavingsAccountService savingsAccountService;
-
-    @Autowired
-    private SavingsAccountRepo savingsAccountRepo;
-
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
         AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
@@ -55,17 +46,23 @@ public class AccountController {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @PostMapping("/savings")
-    public ResponseEntity<AccountResponseDTO> createSavingsAccount(@RequestBody CreateSavingsDTO accountRequestDTO) {
-
-        Account account = repo.findById(1L).orElseThrow(() -> new RuntimeException("Account not found"));
-
-        SavingsAccountDetails savingsDetails = new SavingsAccountDetails();
-        savingsDetails.setAccount(account);
-        savingsDetails.setApy(accountRequestDTO.getApy());
-
-        savingsAccountRepo.save(savingsDetails);
-
-        return new ResponseEntity<>(AccountMapper.fromEntityToResponseDTO(account), HttpStatus.CREATED);
+    @DeleteMapping("{userId}/deleteAccount/{accountId}")
+    public ResponseEntity<AccountResponseDTO> deleteAccount(@PathVariable Long userId,@PathVariable Long accountId) {
+        AccountResponseDTO accountResponseDTO=  accountService.deleteAccount(userId, accountId);
+        return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
+
+//    @PostMapping("/savings")
+//    public ResponseEntity<AccountResponseDTO> createSavingsAccount(@RequestBody CreateSavingsDTO accountRequestDTO) {
+//
+//        Account account = repo.findById(1L).orElseThrow(() -> new RuntimeException("Account not found"));
+//
+//        SavingsAccountDetails savingsDetails = new SavingsAccountDetails();
+//        savingsDetails.setAccount(account);
+//        savingsDetails.setApy(accountRequestDTO.getApy());
+//
+//        savingsAccountRepo.save(savingsDetails);
+//
+//        return new ResponseEntity<>(AccountMapper.fromEntityToResponseDTO(account), HttpStatus.CREATED);
+//    }
 }

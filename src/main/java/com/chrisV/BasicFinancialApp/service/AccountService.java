@@ -60,4 +60,15 @@ public class AccountService {
         return accounts;
 
     }
+
+    @Transactional
+    public AccountResponseDTO deleteAccount(Long userId, Long accountId) {
+        User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        Account account = accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+
+        if (account != null && account.getUser().getId().equals(userId)) {
+            return AccountMapper.fromEntityToResponseDTO(accountRepo.deleteByIdAndUserId(accountId, userId));
+        }
+        return null;
+    }
 }

@@ -1,6 +1,5 @@
 package com.chrisV.BasicFinancialApp.repository;
 
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
 import com.chrisV.BasicFinancialApp.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +18,9 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
     Optional<Account> findByIdWithCheckingDetails(@Param("id") Long id);
 
     List<Account> findAllByUserId(Long userId);
+
+    Account deleteByIdAndUserId(Long accountId, Long userId);
+
 
 
 //    @Query("SELECT new com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse(" +
