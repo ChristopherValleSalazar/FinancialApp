@@ -19,7 +19,7 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
 
 
 
-//    @Query("SELECT new com.chrisV.BasicFinancialApp.dto.CheckingAccountResponse(" +
+//    @Query("SELECT new com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse(" +
 //           "a.accountType, a.bankName, a.notes, a.nickname, a.balance, " +
 //           "cad.overdraftLimit, cad.monthlyFee, cad.minimumBalance) " +
 //           "FROM Account a JOIN CheckingAccountDetails cad ON a.id = cad.account.id " +

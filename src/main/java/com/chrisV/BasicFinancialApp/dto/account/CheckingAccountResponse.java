@@ -1,4 +1,4 @@
-package com.chrisV.BasicFinancialApp.dto;
+package com.chrisV.BasicFinancialApp.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

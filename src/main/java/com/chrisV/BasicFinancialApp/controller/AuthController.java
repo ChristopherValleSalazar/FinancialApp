@@ -1,8 +1,8 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.UserLoginDTO;
-import com.chrisV.BasicFinancialApp.dto.UserRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.UserResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserRequestDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
 import com.chrisV.BasicFinancialApp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

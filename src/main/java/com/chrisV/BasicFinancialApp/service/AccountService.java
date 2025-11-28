@@ -1,9 +1,8 @@
 package com.chrisV.BasicFinancialApp.service;
 
-import com.chrisV.BasicFinancialApp.dto.AccountRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.CheckingAccountRequest;
-import com.chrisV.BasicFinancialApp.dto.CheckingAccountResponse;
+import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
+import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
 import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.AccountType;
