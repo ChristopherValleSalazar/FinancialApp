@@ -1,6 +1,6 @@
 package com.chrisV.BasicFinancialApp.mapper;
 
-import com.chrisV.BasicFinancialApp.dto.*;
+import com.chrisV.BasicFinancialApp.dto.user.*;
 import com.chrisV.BasicFinancialApp.model.User;
 
 public class UserMapper {

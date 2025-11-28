@@ -1,6 +1,9 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.*;
+import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserUpdateEmailDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserUpdateNameDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserUpdateUsernameDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.service.UserService;
