@@ -1,8 +1,8 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.CheckingAccountRequestDTO;
+import com.chrisV.BasicFinancialApp.dto.AccountRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.CheckingAccountResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.CheckingAccountResponse;
 import com.chrisV.BasicFinancialApp.dto.CreateSavingsDTO;
 import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
@@ -36,11 +36,12 @@ public class AccountController {
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
         AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
+        CheckingAccountResponse checkingDetails = (CheckingAccountResponse) dto.getAccountDetails();
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/checking")
-    public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody CheckingAccountRequestDTO account) {
+    public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody AccountRequestDTO account) {
         AccountResponseDTO dto = accountService.addCheckingAccountToUser(userId, account);
         //return account without sensitive info
         return new ResponseEntity<>(dto, HttpStatus.OK);
