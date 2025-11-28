@@ -34,8 +34,8 @@ public class AccountController {
     private SavingsAccountRepo savingsAccountRepo;
 
     @GetMapping("/{accountId}/checking")
-    public ResponseEntity<CheckingAccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
-        CheckingAccountResponseDTO dto = accountService.getCheckingAccountInfo(accountId);
+    public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
+        AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
