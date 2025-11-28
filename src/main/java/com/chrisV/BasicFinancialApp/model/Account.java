@@ -44,4 +44,11 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private CheckingAccountDetails checkingAccountDetails;
 
+    //setter to map bidirectional relationship for CheckingAccountDetails
+    public void setCheckingAccountDetails(CheckingAccountDetails details) {
+        this.checkingAccountDetails = details;
+        if(details != null) {
+            details.setAccount(this);
+        }
+    }
 }
