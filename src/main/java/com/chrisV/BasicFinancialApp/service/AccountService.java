@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,9 +26,6 @@ public class AccountService {
 
     @Autowired
     AccountRepo accountRepo;
-
-    @Autowired
-    CheckingAccountRepo checkingAccountRepo;
 
     public AccountResponseDTO addCheckingAccountToUser(Long userId, AccountRequestDTO accountDTO) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
@@ -48,39 +46,18 @@ public class AccountService {
     }
 
     private AccountResponseDTO toDto(Account a) {
-        AccountResponseDTO dto = new AccountResponseDTO();
-        dto.setAccountType(a.getAccountType());
-        dto.setBankName(a.getBankName());
-        dto.setNotes(a.getNotes());
-        dto.setNickname(a.getNickname());
-        dto.setBalance(a.getBalance());
-
-        // Only populate checkingDetails if this account is of type CHECKING (defensive)
-        if (a.getAccountType() == AccountType.CHECKING) {
-            CheckingAccountDetails ch = a.getCheckingAccountDetails();
-            if (ch != null) {
-                CheckingAccountResponse cdto = new CheckingAccountResponse();
-                cdto.setOverdraftLimit(ch.getOverdraftLimit());
-                cdto.setMonthlyFee(ch.getMonthlyFee());
-                cdto.setMinimumBalance(ch.getMinimumBalance());
-                dto.setAccountDetails(cdto);
-            }
-        }
+        AccountResponseDTO dto = AccountMapper.fromEntityToResponseDTO(a);
         return dto;
     }
 
+    @Transactional(readOnly = true)
+    public List<AccountResponseDTO> getAllCheckingAccountsByUserId(Long userId) {
+        List<AccountResponseDTO> accounts = accountRepo.findAllByUserId(userId)
+                .stream()
+                .filter(dto -> dto.getAccountType() == AccountType.CHECKING)
+                .map(account -> AccountMapper.fromEntityToResponseDTO(account))
+                .toList();
+        return accounts;
 
-
-
-
-
-
-//    public CheckingAccountResponse getCheckingAccountInfo(Long accountId) {
-//        return accountRepo.findCheckingAccountDetailsById(accountId).orElseThrow(() -> new RuntimeException("Checking account not found with id: " + accountId));
-
-//    }
-
-
-
-
+    }
 }

@@ -25,7 +25,6 @@ public class AccountMapper {
             checkingDTO.setMinimumBalance(checkingDetails.getMinimumBalance());
             dto.setAccountDetails(checkingDTO);
         }
-
         return dto;
     }
 

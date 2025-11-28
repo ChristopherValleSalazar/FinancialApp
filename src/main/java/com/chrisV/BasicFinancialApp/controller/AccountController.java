@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/accounts")
 @CrossOrigin("http://localhost:5173")
@@ -45,6 +47,12 @@ public class AccountController {
         AccountResponseDTO dto = accountService.addCheckingAccountToUser(userId, account);
         //return account without sensitive info
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("{userId}/AllChecking")
+    public ResponseEntity<List<AccountResponseDTO>> getAllCheckingAccountsByUserId(@PathVariable Long userId) {
+        List<AccountResponseDTO> accounts = accountService.getAllCheckingAccountsByUserId(userId);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @PostMapping("/savings")
