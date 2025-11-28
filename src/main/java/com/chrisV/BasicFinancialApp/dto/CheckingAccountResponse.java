@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CheckingAccountResponseDTO {
+public class CheckingAccountResponse implements AccountDetails {
     private BigDecimal overdraftLimit;
     private BigDecimal monthlyFee;
     private BigDecimal minimumBalance;

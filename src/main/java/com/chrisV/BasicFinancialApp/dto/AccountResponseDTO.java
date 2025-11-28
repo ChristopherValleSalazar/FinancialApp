@@ -15,5 +15,5 @@ public class AccountResponseDTO {
     private String notes;
     private String nickname;
 
-    private CheckingAccountResponseDTO checkingAccountDetails;
+    private AccountDetails accountDetails;
 }
