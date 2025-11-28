@@ -21,12 +21,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //make into ENUM later
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
-//
-//    //handle in frontend later
-//    private String currency;
 
     private String bankName;
     private BigDecimal balance;
@@ -44,4 +40,8 @@ public class Account {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private CheckingAccountDetails checkingAccountDetails;
+
 }
