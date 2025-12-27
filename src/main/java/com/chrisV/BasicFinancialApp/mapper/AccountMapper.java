@@ -19,13 +19,14 @@ public class AccountMapper {
         dto.setNotes(account.getNotes());
         dto.setNickname(account.getNickname());
 
+        AccountResponseDTO detailedDTO;
+
         switch(account.getAccountType()) {
-            case CHECKING:
-                return checkingAccountMapper(dto, account);
+            case CHECKING -> detailedDTO =  checkingAccountMapper(dto, account);
             // Add other account types here as needed
-            default:
-                return null;
+            default -> detailedDTO = null;
         }
+        return detailedDTO;
     }
 
     private AccountResponseDTO checkingAccountMapper(AccountResponseDTO dto, Account account) {
