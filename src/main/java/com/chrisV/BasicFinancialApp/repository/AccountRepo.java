@@ -18,17 +18,5 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
     Optional<Account> findByIdWithCheckingDetails(@Param("id") Long id);
 
     List<Account> findAllByUserId(Long userId);
-
     Account deleteByIdAndUserId(Long accountId, Long userId);
-
-
-
-//    @Query("SELECT new com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse(" +
-//           "a.accountType, a.bankName, a.notes, a.nickname, a.balance, " +
-//           "cad.overdraftLimit, cad.monthlyFee, cad.minimumBalance) " +
-//           "FROM Account a JOIN CheckingAccountDetails cad ON a.id = cad.account.id " +
-//           "WHERE a.id = :accountId")
-//    Optional<CheckingAccountResponse> findCheckingAccountDetailsById(Long accountId);
-
-
 }
