@@ -29,6 +29,16 @@ public class AccountMapper {
         return detailedDTO;
     }
 
+    public AccountResponseDTO fromEntityToResponseDTOWithoutDetails(Account account) {
+        AccountResponseDTO dto = new AccountResponseDTO();
+        dto.setAccountType(account.getAccountType());
+        dto.setBalance(account.getBalance());
+        dto.setBankName(account.getBankName());
+        dto.setNotes(account.getNotes());
+        dto.setNickname(account.getNickname());
+        return dto;
+    }
+
     private AccountResponseDTO checkingAccountMapper(AccountResponseDTO dto, Account account) {
         CheckingAccountDetails checkingDetails = account.getCheckingAccountDetails();
         CheckingAccountResponse checkingDTO = new CheckingAccountResponse();

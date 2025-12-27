@@ -2,15 +2,9 @@ package com.chrisV.BasicFinancialApp.controller;
 
 import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
-import com.chrisV.BasicFinancialApp.dto.account.CreateSavingsDTO;
-import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
-import com.chrisV.BasicFinancialApp.model.Account;
-import com.chrisV.BasicFinancialApp.model.SavingsAccountDetails;
-import com.chrisV.BasicFinancialApp.repository.AccountRepo;
-import com.chrisV.BasicFinancialApp.repository.SavingsAccountRepo;
 import com.chrisV.BasicFinancialApp.service.AccountService;
-import com.chrisV.BasicFinancialApp.service.SavingsAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +22,7 @@ public class AccountController {
 
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
-        AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
+        AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " is not a checking account"));
         CheckingAccountResponse checkingDetails = (CheckingAccountResponse) dto.getAccountDetails();
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
@@ -48,21 +42,16 @@ public class AccountController {
 
     @DeleteMapping("{userId}/deleteAccount/{accountId}")
     public ResponseEntity<AccountResponseDTO> deleteAccount(@PathVariable Long userId,@PathVariable Long accountId) {
-        AccountResponseDTO accountResponseDTO=  accountService.deleteAccount(userId, accountId);
+        AccountResponseDTO accountResponseDTO = accountService.deleteAccount(userId, accountId);
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
 
-//    @PostMapping("/savings")
-//    public ResponseEntity<AccountResponseDTO> createSavingsAccount(@RequestBody CreateSavingsDTO accountRequestDTO) {
-//
-//        Account account = repo.findById(1L).orElseThrow(() -> new RuntimeException("Account not found"));
-//
-//        SavingsAccountDetails savingsDetails = new SavingsAccountDetails();
-//        savingsDetails.setAccount(account);
-//        savingsDetails.setApy(accountRequestDTO.getApy());
-//
-//        savingsAccountRepo.save(savingsDetails);
-//
-//        return new ResponseEntity<>(AccountMapper.fromEntityToResponseDTO(account), HttpStatus.CREATED);
-//    }
+    @PatchMapping("{userId}/updateAccount/{accountId}")
+    public ResponseEntity<AccountResponseDTO> updateAccount(@PathVariable Long userId, @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
+        AccountResponseDTO updatedAccount = accountService.updateAccount(accountId, accountRequestDTO);
+
+        System.out.println(updatedAccount);
+
+        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+    }
 }
