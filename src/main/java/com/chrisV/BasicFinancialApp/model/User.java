@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString(exclude = "password")
+@ToString(exclude = {"password", "accounts"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
