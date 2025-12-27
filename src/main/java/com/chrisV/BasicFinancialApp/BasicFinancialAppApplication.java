@@ -10,5 +10,4 @@ public class BasicFinancialAppApplication {
 		SpringApplication.run(BasicFinancialAppApplication.class, args);
         System.out.println("The Basic Financial App is running!");
 	}
-
 }

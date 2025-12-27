@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,21 +13,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@ToString(exclude = "user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //make into ENUM later
-    private String accountType;
-
-    //handle in frontend later
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     private String bankName;
+    private BigDecimal balance;
 
     private String notes;
     private String nickname;
@@ -36,15 +37,20 @@ public class Account {
     @JsonBackReference
     private User user;
 
-    @Column(nullable = false)
-    private Boolean isActive;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    private BigDecimal interestRate;
-    private BigDecimal balance;
 
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private CheckingAccountDetails checkingAccountDetails;
+
+    //setter to map bidirectional relationship for CheckingAccountDetails
+    public void setCheckingAccountDetails(CheckingAccountDetails details) {
+        this.checkingAccountDetails = details;
+        if(details != null) {
+            details.setAccount(this);
+        }
+    }
 }

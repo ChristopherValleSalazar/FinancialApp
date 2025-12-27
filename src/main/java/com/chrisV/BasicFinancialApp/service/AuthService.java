@@ -1,8 +1,8 @@
 package com.chrisV.BasicFinancialApp.service;
 
-import com.chrisV.BasicFinancialApp.dto.UserLoginDTO;
-import com.chrisV.BasicFinancialApp.dto.UserRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.UserResponseDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserRequestDTO;
+import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
