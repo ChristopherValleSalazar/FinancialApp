@@ -6,10 +6,12 @@ import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountRequest;
 import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.CheckingAccountDetails;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountMapper {
 
-    public static AccountResponseDTO fromEntityToResponseDTO(Account account) {
+    public AccountResponseDTO fromEntityToResponseDTO(Account account) {
         AccountResponseDTO dto = new AccountResponseDTO();
         dto.setAccountType(account.getAccountType());
         dto.setBalance(account.getBalance());
@@ -17,8 +19,19 @@ public class AccountMapper {
         dto.setNotes(account.getNotes());
         dto.setNickname(account.getNickname());
 
-        CheckingAccountResponse checkingDTO = new CheckingAccountResponse();
+        switch(account.getAccountType()) {
+            case CHECKING:
+                return checkingAccountMapper(dto, account);
+            // Add other account types here as needed
+            default:
+                return null;
+        }
+    }
+
+    private AccountResponseDTO checkingAccountMapper(AccountResponseDTO dto, Account account) {
         CheckingAccountDetails checkingDetails = account.getCheckingAccountDetails();
+        CheckingAccountResponse checkingDTO = new CheckingAccountResponse();
+
         if (checkingDetails != null) {
             checkingDTO.setOverdraftLimit(checkingDetails.getOverdraftLimit());
             checkingDTO.setMonthlyFee(checkingDetails.getMonthlyFee());
@@ -28,7 +41,7 @@ public class AccountMapper {
         return dto;
     }
 
-    public static Account fromRequestDTOToEntity(AccountRequestDTO dto) {
+    public Account fromRequestDTOToEntity(AccountRequestDTO dto) {
         Account account = new Account();
         // Assuming AccountRequestDTO has similar fields as Account
         account.setAccountType(dto.getAccountType());
@@ -45,10 +58,6 @@ public class AccountMapper {
         checkingDetails.setMinimumBalance(checkingDTO.getMinimumBalance());
 
         account.setCheckingAccountDetails(checkingDetails);
-
         return account;
     }
-
-
-
 }
