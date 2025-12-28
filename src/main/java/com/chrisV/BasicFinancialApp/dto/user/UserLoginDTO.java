@@ -1,19 +1,11 @@
 package com.chrisV.BasicFinancialApp.dto.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserLoginDTO {
-    private Long id;
     private String password;
     private String username;
-
-    public UserLoginDTO() {}
-    public UserLoginDTO(Long id, String password, String username) {
-        this.id = id;
-        this.password = password;
-        this.username = username;
-    }
 }
