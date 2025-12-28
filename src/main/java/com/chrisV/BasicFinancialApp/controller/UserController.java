@@ -5,6 +5,7 @@ import com.chrisV.BasicFinancialApp.dto.user.UserUpdateEmailDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateNameDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateUsernameDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
+import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         //logic
@@ -35,11 +38,12 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    //TODO: Transfer to service, from here to last method
     @PatchMapping("/update-name/{id}")
     public ResponseEntity<UserUpdateNameDTO> updateUserNames(@PathVariable Long id, @RequestBody UserUpdateNameDTO userUpdate) {
         //check each field and update except id and accounts
         User updatedUser = userService.updateOnlyNameUser(userUpdate, id);
-        return new ResponseEntity<>(UserMapper.fromEntityNameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateNameDTO(updatedUser), HttpStatus.OK);
     }
 
     @PatchMapping("/update-username/{id}")
@@ -49,7 +53,7 @@ public class UserController {
 
         User updatedUser = userService.updateOnlyUsernameUser(userUpdate, id);
 
-        return new ResponseEntity<>(UserMapper.fromEntityUsernameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateUsernameDTO(updatedUser), HttpStatus.OK);
     }
 
     @PatchMapping("/update-email/{id}")
@@ -58,6 +62,6 @@ public class UserController {
             @RequestBody UserUpdateEmailDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyEmailUser(userUpdate, id);
-        return new ResponseEntity<>(UserMapper.fromEntityEmailDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateEmailDTO(updatedUser), HttpStatus.OK);
     }
 }

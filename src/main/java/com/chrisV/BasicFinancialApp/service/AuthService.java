@@ -4,6 +4,7 @@ import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
+import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +20,26 @@ public class AuthService {
     @Autowired
     private UserRepo repo;
 
+    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+
     public UserResponseDTO createUser(UserRequestDTO user) {
         if(repo.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists: " + user.getUsername());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword())); //hash with BCrypt before saving
+        User savingUser = mapper.userRequestDTOToUser(user);
 
-        User savingUser = UserMapper.toEntityFromRequestDTO(user);
         repo.save(savingUser);
-        return UserMapper.fromEntityToResponseDTO(savingUser);
+        return mapper.userToUserResponseDTO(savingUser);
     }
 
     public UserResponseDTO userLogin(UserLoginDTO userLogin) {
         User existingUser = repo.findByUsername(userLogin.getUsername());
         String passwordToCheck = userLogin.getPassword();
 
-        if(passwordEncoder.matches(passwordToCheck, existingUser.getPassword())) {
-            return UserMapper.fromEntityToResponseDTO(existingUser);
+        if(!passwordEncoder.matches(passwordToCheck, existingUser.getPassword())) {
+            return null; //invalid password
         }
-        return null;
+        return mapper.userToUserResponseDTO(existingUser);
     }
 }

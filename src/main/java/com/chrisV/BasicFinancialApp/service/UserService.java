@@ -5,6 +5,7 @@ import com.chrisV.BasicFinancialApp.dto.user.UserUpdateEmailDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateNameDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateUsernameDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
+import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,11 @@ public class UserService {
     @Autowired
     private UserRepo repo;
 
+    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+
     public List<UserResponseDTO> getAllUsers() {
         List<UserResponseDTO> userDTOS = repo.findAll().stream().
-                map(UserMapper::fromEntityToResponseDTO).toList();
+                map(mapper::userToUserResponseDTO).toList();
 
         if(userDTOS.isEmpty()) {
             return null;
@@ -35,7 +38,7 @@ public class UserService {
         if(user == null) {
             return null;
         }
-        return UserMapper.fromEntityToResponseDTO(user);
+        return mapper.userToUserResponseDTO(user);
     }
 
     public User updateOnlyNameUser(UserUpdateNameDTO userUpdate, Long id) {
