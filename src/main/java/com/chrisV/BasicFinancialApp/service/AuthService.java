@@ -4,7 +4,6 @@ import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class AuthService {
     @Autowired
     private UserRepo repo;
 
-    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+    private final UserMapper mapper = UserMapper.INSTANCE;
 
     public UserResponseDTO createUser(UserRequestDTO user) {
         if(repo.existsByUsername(user.getUsername())) {

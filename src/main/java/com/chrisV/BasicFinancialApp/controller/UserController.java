@@ -5,7 +5,6 @@ import com.chrisV.BasicFinancialApp.dto.user.UserUpdateEmailDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateNameDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateUsernameDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
 import com.chrisV.BasicFinancialApp.model.User;
 import com.chrisV.BasicFinancialApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("http://localhost:5173")
+//@CrossOrigin("http://localhost:5173")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+    private final UserMapper mapper = UserMapper.INSTANCE;
 
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -41,6 +40,7 @@ public class UserController {
     //TODO: Transfer to service, from here to last method
     @PatchMapping("/update-name/{id}")
     public ResponseEntity<UserUpdateNameDTO> updateUserNames(@PathVariable Long id, @RequestBody UserUpdateNameDTO userUpdate) {
+
         //check each field and update except id and accounts
         User updatedUser = userService.updateOnlyNameUser(userUpdate, id);
         return new ResponseEntity<>(mapper.userToUserUpdateNameDTO(updatedUser), HttpStatus.OK);
@@ -52,7 +52,6 @@ public class UserController {
             @RequestBody UserUpdateUsernameDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyUsernameUser(userUpdate, id);
-
         return new ResponseEntity<>(mapper.userToUserUpdateUsernameDTO(updatedUser), HttpStatus.OK);
     }
 

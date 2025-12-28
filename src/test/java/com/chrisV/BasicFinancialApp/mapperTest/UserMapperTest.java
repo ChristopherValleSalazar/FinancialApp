@@ -1,7 +1,6 @@
 package com.chrisV.BasicFinancialApp.mapperTest;
 
-import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
-import com.chrisV.BasicFinancialApp.mapper.UserUpgradeMapper;
+import com.chrisV.BasicFinancialApp.mapper.UserMapper;
 import com.chrisV.BasicFinancialApp.model.Account;
 import com.chrisV.BasicFinancialApp.model.AccountType;
 import com.chrisV.BasicFinancialApp.model.CheckingAccountDetails;
@@ -18,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class UserMapperTest {
 
     private static User user;
-    private UserUpgradeMapper mapper = UserUpgradeMapper.INSTANCE;
+    private final UserMapper mapper = UserMapper.INSTANCE;
 
     @BeforeAll
     public static void setUp() {
