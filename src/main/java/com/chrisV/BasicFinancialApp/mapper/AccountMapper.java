@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountMapper {
 
+
     public AccountResponseDTO fromEntityToResponseDTO(Account account) {
         AccountResponseDTO dto = new AccountResponseDTO();
         dto.setAccountType(account.getAccountType());
