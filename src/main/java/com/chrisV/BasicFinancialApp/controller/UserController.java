@@ -16,8 +16,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("http://localhost:5173")
+//@CrossOrigin("http://localhost:5173")
 public class UserController {
+
+    @Autowired
+    private UserMapper mapper;
 
     @Autowired
     private UserService userService;
@@ -35,11 +38,13 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    //TODO: Transfer to service, from here to last method
     @PatchMapping("/update-name/{id}")
     public ResponseEntity<UserUpdateNameDTO> updateUserNames(@PathVariable Long id, @RequestBody UserUpdateNameDTO userUpdate) {
+
         //check each field and update except id and accounts
         User updatedUser = userService.updateOnlyNameUser(userUpdate, id);
-        return new ResponseEntity<>(UserMapper.fromEntityNameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateNameDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 
     @PatchMapping("/update-username/{id}")
@@ -48,8 +53,7 @@ public class UserController {
             @RequestBody UserUpdateUsernameDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyUsernameUser(userUpdate, id);
-
-        return new ResponseEntity<>(UserMapper.fromEntityUsernameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateUsernameDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 
     @PatchMapping("/update-email/{id}")
@@ -58,6 +62,6 @@ public class UserController {
             @RequestBody UserUpdateEmailDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyEmailUser(userUpdate, id);
-        return new ResponseEntity<>(UserMapper.fromEntityEmailDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateEmailDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 }

@@ -19,9 +19,12 @@ public class UserService {
     @Autowired
     private UserRepo repo;
 
+    @Autowired
+    private UserMapper mapper;
+
     public List<UserResponseDTO> getAllUsers() {
         List<UserResponseDTO> userDTOS = repo.findAll().stream().
-                map(UserMapper::fromEntityToResponseDTO).toList();
+                map(mapper::userToUserResponseDTO).toList();
 
         if(userDTOS.isEmpty()) {
             return null;
@@ -35,7 +38,7 @@ public class UserService {
         if(user == null) {
             return null;
         }
-        return UserMapper.fromEntityToResponseDTO(user);
+        return mapper.userToUserResponseDTO(user);
     }
 
     public User updateOnlyNameUser(UserUpdateNameDTO userUpdate, Long id) {

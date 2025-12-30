@@ -2,65 +2,29 @@ package com.chrisV.BasicFinancialApp.mapper;
 
 import com.chrisV.BasicFinancialApp.dto.user.*;
 import com.chrisV.BasicFinancialApp.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-public class UserMapper {
+@Mapper(componentModel = "spring") //TODO: make all places where this is use into a spring bean injection type implementation
+public interface UserMapper {
 
-    public static UserUpdateNameDTO fromEntityNameDTO(User user) {
+//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class); //singleton instance
 
-        UserUpdateNameDTO dto = new UserUpdateNameDTO();
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        return dto;
-    }
+    //implementing mapStruct preventing boilerplate code
+    UserUpdateNameDTO userToUserUpdateNameDTO(User user); //TODO: In UserMapper
+    UserUpdateUsernameDTO userToUserUpdateUsernameDTO(User user); //TODO: In UserMapper
+    UserUpdateEmailDTO userToUserUpdateEmailDTO(User user); //TODO: In UserMapper
 
-    public static UserUpdateUsernameDTO fromEntityUsernameDTO(User user) {
-        return new UserUpdateUsernameDTO(user.getUsername());
-    }
-
-    public static UserUpdateEmailDTO fromEntityEmailDTO(User user) {
-        return new UserUpdateEmailDTO(user.getEmail());
-    }
-
-    public static User toEntityResponseDTO(UserResponseDTO dto) {
-        User user = new User();
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setId(dto.getId());
-        user.setEmail(dto.getEmail());
-        return user;
-    }
-
-    public static UserResponseDTO fromEntityToResponseDTO(User user) {
-        UserResponseDTO dto = new UserResponseDTO();
-        dto.setId(user.getId());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
+    User userResponseDTOToUser(UserResponseDTO dto); //TODO: In UserMapper
+    UserResponseDTO userToUserResponseDTO(User user); //TODO: In UserMapper
+    User userRequestDTOToUser(UserRequestDTO dto); //TODO: In UserMapper
+    UserRequestDTO userToUserRequestDTO(User user); //TODO: In UserMapper
 
 
-    public static User toEntityFromRequestDTO(UserRequestDTO user) {
-        User newUser = new User();
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setEmail(user.getEmail());
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
-        return newUser;
-    }
-
-    public static UserRequestDTO fromEntityToRequestDTO(User user) {
-        UserRequestDTO dto = new UserRequestDTO();
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
-        return dto;
-    }
+    //UserLoginDTO userToUserLoginDTO(User user); //TODO: In AuthService
 
 
+//start learning how to implement MapStruct into the account mapping with nested objects.
 
 
 }

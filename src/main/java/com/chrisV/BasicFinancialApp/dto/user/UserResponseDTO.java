@@ -1,10 +1,10 @@
 package com.chrisV.BasicFinancialApp.dto.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 // Simple user with no sensitive info
 public class UserResponseDTO {
@@ -12,12 +12,4 @@ public class UserResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
-
-    public UserResponseDTO() {}
-    public UserResponseDTO(Long id, String firstName, String lastName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
 }
