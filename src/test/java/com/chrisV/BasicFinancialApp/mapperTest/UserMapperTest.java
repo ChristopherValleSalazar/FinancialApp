@@ -7,6 +7,7 @@ import com.chrisV.BasicFinancialApp.model.CheckingAccountDetails;
 import com.chrisV.BasicFinancialApp.model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -17,7 +18,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class UserMapperTest {
 
     private static User user;
-    private final UserMapper mapper = UserMapper.INSTANCE;
+
+    @Autowired
+    private UserMapper mapper;
 
     @BeforeAll
     public static void setUp() {
