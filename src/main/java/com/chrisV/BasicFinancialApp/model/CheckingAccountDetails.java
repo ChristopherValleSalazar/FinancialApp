@@ -26,3 +26,6 @@ public class CheckingAccountDetails {
     private BigDecimal minimumBalance;
 //    private LocalDate lastFeeApplied;
 }
+
+
+

@@ -19,7 +19,11 @@ public class AuthService {
     @Autowired
     private UserRepo repo;
 
-    private final UserMapper mapper = UserMapper.INSTANCE;
+    @Autowired
+    private UserMapper mapper;
+
+
+//    private final UserMapper mapper = UserMapper.INSTANCE;
 
     public UserResponseDTO createUser(UserRequestDTO user) {
         if(repo.existsByUsername(user.getUsername())) {

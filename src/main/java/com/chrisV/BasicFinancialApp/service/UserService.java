@@ -19,7 +19,8 @@ public class UserService {
     @Autowired
     private UserRepo repo;
 
-    private final UserMapper mapper = UserMapper.INSTANCE;
+    @Autowired
+    private UserMapper mapper;
 
     public List<UserResponseDTO> getAllUsers() {
         List<UserResponseDTO> userDTOS = repo.findAll().stream().

@@ -20,9 +20,10 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserMapper mapper;
 
-    private final UserMapper mapper = UserMapper.INSTANCE;
+    @Autowired
+    private UserService userService;
 
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -43,7 +44,7 @@ public class UserController {
 
         //check each field and update except id and accounts
         User updatedUser = userService.updateOnlyNameUser(userUpdate, id);
-        return new ResponseEntity<>(mapper.userToUserUpdateNameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateNameDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 
     @PatchMapping("/update-username/{id}")
@@ -52,7 +53,7 @@ public class UserController {
             @RequestBody UserUpdateUsernameDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyUsernameUser(userUpdate, id);
-        return new ResponseEntity<>(mapper.userToUserUpdateUsernameDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateUsernameDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 
     @PatchMapping("/update-email/{id}")
@@ -61,6 +62,6 @@ public class UserController {
             @RequestBody UserUpdateEmailDTO userUpdate) {
 
         User updatedUser = userService.updateOnlyEmailUser(userUpdate, id);
-        return new ResponseEntity<>(mapper.userToUserUpdateEmailDTO(updatedUser), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.userToUserUpdateEmailDTO(updatedUser), HttpStatus.OK); //TODO: Move to service
     }
 }
