@@ -31,7 +31,7 @@ public class AccountService {
     public AccountResponseDTO addCheckingAccountToUser(Long userId, AccountRequestDTO accountDTO) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        Account accountEntity = accountMapper.fromRequestDTOToEntity(accountDTO);
+        Account accountEntity = accountMapper.fromRequestDtoToEntity(accountDTO);
 
         // set bidirectional relationship
         accountEntity.setUser(user);
@@ -46,8 +46,8 @@ public class AccountService {
                 .map(this::toDto); // map Account entity to AccountResponseDTO
     }
 
-    private AccountResponseDTO toDto(Account a) {
-        return accountMapper.fromEntityToResponseDTO(a);
+    private AccountResponseDTO toDto(Account entity) {
+        return accountMapper.fromEntityToResponseDTO(entity);
     }
 
     @Transactional(readOnly = true)
@@ -65,14 +65,18 @@ public class AccountService {
         Account account = accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
 
         if (account != null && account.getUser().getId().equals(userId)) {
-            return accountMapper.fromEntityToResponseDTO(accountRepo.deleteByIdAndUserId(accountId, userId));
+            return accountMapper.fromEntityToResponseDTO(accountRepo.deleteByIdAndUserId(accountId, userId)); //TODO: return a simpler dto since its a deletion
         }
         return null;
     }
 
+    @Transactional(readOnly = true)
     public AccountResponseDTO updateAccount(Long accountId, AccountUpdateRequestDTO accountRequestDTO) {
         Account existingAccount = accountRepo.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
+
+        //TODO: figure out how to handle account type changes properly
+        //TODO: figure out how to remove these null checks with mapstruct
 
         // Update fields
         if(accountRequestDTO.getAccountType() != null) {
@@ -89,6 +93,6 @@ public class AccountService {
         }
 
         accountRepo.save(existingAccount);
-        return accountMapper.fromEntityToResponseDTOWithoutDetails(existingAccount);
+        return accountMapper.fromEntityToResponseDTO(existingAccount);
     }
 }
