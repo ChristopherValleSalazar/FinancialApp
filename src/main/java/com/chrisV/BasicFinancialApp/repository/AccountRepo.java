@@ -1,6 +1,6 @@
 package com.chrisV.BasicFinancialApp.repository;
 
-import com.chrisV.BasicFinancialApp.model.Account;
+import com.chrisV.BasicFinancialApp.model.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

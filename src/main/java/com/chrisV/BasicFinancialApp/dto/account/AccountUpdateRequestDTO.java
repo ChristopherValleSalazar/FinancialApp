@@ -1,6 +1,6 @@
 package com.chrisV.BasicFinancialApp.dto.account;
 
-import com.chrisV.BasicFinancialApp.model.AccountType;
+import com.chrisV.BasicFinancialApp.model.account.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

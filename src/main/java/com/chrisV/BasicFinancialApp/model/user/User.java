@@ -1,5 +1,6 @@
-package com.chrisV.BasicFinancialApp.model;
+package com.chrisV.BasicFinancialApp.model.user;
 
+import com.chrisV.BasicFinancialApp.model.account.Account;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
