@@ -5,7 +5,7 @@ import com.chrisV.BasicFinancialApp.dto.user.UserUpdateEmailDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateNameDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserUpdateUsernameDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.model.User;
+import com.chrisV.BasicFinancialApp.model.user.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,7 @@ import com.chrisV.BasicFinancialApp.dto.user.UserLoginDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.user.UserResponseDTO;
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.model.User;
+import com.chrisV.BasicFinancialApp.model.user.User;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

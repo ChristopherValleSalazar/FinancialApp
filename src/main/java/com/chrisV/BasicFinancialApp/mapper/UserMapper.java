@@ -1,9 +1,8 @@
 package com.chrisV.BasicFinancialApp.mapper;
 
 import com.chrisV.BasicFinancialApp.dto.user.*;
-import com.chrisV.BasicFinancialApp.model.User;
+import com.chrisV.BasicFinancialApp.model.user.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring") //TODO: make all places where this is use into a spring bean injection type implementation
 public interface UserMapper {

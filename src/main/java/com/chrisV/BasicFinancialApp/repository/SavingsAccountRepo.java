@@ -1,6 +1,6 @@
 package com.chrisV.BasicFinancialApp.repository;
 
-import com.chrisV.BasicFinancialApp.model.SavingsAccountDetails;
+import com.chrisV.BasicFinancialApp.model.account.SavingsAccountDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
