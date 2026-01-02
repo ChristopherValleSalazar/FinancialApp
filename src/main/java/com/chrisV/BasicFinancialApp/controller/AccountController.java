@@ -1,9 +1,13 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
+import com.chrisV.BasicFinancialApp.dto.account.*;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
+import com.chrisV.BasicFinancialApp.mapper.AccountBaseMapper;
+import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
+import com.chrisV.BasicFinancialApp.model.account.Account;
+import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
+import com.chrisV.BasicFinancialApp.repository.AccountRepo;
 import com.chrisV.BasicFinancialApp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -20,6 +25,13 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    //TODO: Delete these injection only testing cause I'm stupid and don't on the testing classes
+    @Autowired
+    private AccountBaseMapper accountMapper;
+
+    @Autowired
+    private AccountRepo repo;
+
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
         AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " is not a checking account"));
@@ -27,6 +39,33 @@ public class AccountController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+
+    //TODO: fix this cause its shit
+    @GetMapping("/{accountId}/transactions")
+    public ResponseEntity<List<TransactionResponse>> getAccountWithTransactions(@PathVariable Long accountId) {
+        return new ResponseEntity<>(accountService.getAllTransactionsByAccountId(accountId), HttpStatus.OK);
+
+
+
+//        Account account = repo.findById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " not found"));
+//
+//        AccountResponseTransactionDto dto = new AccountResponseTransactionDto();
+//
+//        dto.setBalance(account.getBalance());
+//        dto.setBankName(account.getBankName());
+////        dto.setNotes(account.getNotes());
+//        dto.setNickname(account.getNickname());
+////        dto.setTransactions(account.getTransactions());
+//
+//        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping("/createTransaction")
+    public ResponseEntity<AccountResponseTransactionDto> createTransaction(@RequestBody TransactionRequest transactionDto) {
+        return new ResponseEntity<>(accountService.createTransaction(transactionDto), HttpStatus.OK);
+    }
+
+    // TODO: restrict Balance to $0 during creation for better handling with expense and income endpoints
     @PostMapping("/{userId}/checking")
     public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody AccountRequestDTO account) {
         AccountResponseDTO dto = accountService.addCheckingAccountToUser(userId, account);
@@ -49,9 +88,12 @@ public class AccountController {
     @PatchMapping("{userId}/updateAccount/{accountId}")
     public ResponseEntity<AccountResponseDTO> updateAccount(@PathVariable Long userId, @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
         AccountResponseDTO updatedAccount = accountService.updateAccount(accountId, accountRequestDTO);
-
-        System.out.println(updatedAccount);
-
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
+
+
+
+
+
+
 }
