@@ -1,5 +1,6 @@
 package com.chrisV.BasicFinancialApp.model.account;
 
+import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
 import com.chrisV.BasicFinancialApp.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @ToString(exclude = "user")
@@ -46,6 +48,10 @@ public class Account {
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private CheckingAccountDetails checkingAccountDetails;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
+    private List<Transaction> transactions;
+
 
     //setter to map bidirectional relationship for CheckingAccountDetails
     public void setCheckingAccountDetails(CheckingAccountDetails details) {
