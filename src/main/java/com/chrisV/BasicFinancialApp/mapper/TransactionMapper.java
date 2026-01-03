@@ -6,10 +6,14 @@ import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
 import com.chrisV.BasicFinancialApp.model.account.Account;
 import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
-    Transaction dtoToEntity(Account account, TransactionRequest transactionDto);
+
+    @Mapping(target = "account", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    Transaction dtoToEntity(TransactionRequest transactionDto);
 
     AccountResponseTransactionDto entityToDto(Account account);
     TransactionResponse transactionToTransactionresponse(Transaction transaction);

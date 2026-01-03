@@ -108,54 +108,27 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountResponseTransactionDto createTransaction(TransactionRequest transactionDto) {
+    public TransactionResponse createTransaction(TransactionRequest transactionDto) {
         Optional<Account> account = accountRepo.findById(transactionDto.getFromAccountId());
 
         //TODO: handle this on separate mapper class
-        Transaction transaction = new Transaction();
-//        transaction = transactionMapper.dtoToEntity(account.get(), transactionDto);
-//
-//        transaction.setAccount(account.orElse(null));
-        transaction.setAmount(transactionDto.getAmount());
-        transaction.setType(transactionDto.getType());
-        transaction.setDescription(transactionDto.getDescription());
-        transaction.setCategory(transactionDto.getCategory());
+        Transaction transaction =  transactionMapper.dtoToEntity(transactionDto);
+        transaction.setAccount(account.get());
 
         //Make better after
         account.get().getTransactions().add(transaction);
         account.get().setBalance((account.get().getBalance()).add(transactionDto.getType() == TransactionType.EXPENSE ? transaction.getAmount().negate() : transaction.getAmount()));
         accountRepo.save(account.get());
 
-        AccountResponseTransactionDto responseDto = new AccountResponseTransactionDto();
-        responseDto = transactionMapper.entityToDto(account.get());
-
-//        responseDto.setBalance(account.get().getBalance());
-//        responseDto.setBankName(account.get().getBankName());
-//        responseDto.setNickname(account.get().getNickname());
-
-        TransactionResponse transactionResponse = new TransactionResponse();
-        transactionResponse = transactionMapper.transactionToTransactionresponse(transaction);
-
-//        transactionResponse.setType(transaction.getType());
-//        transactionResponse.setDescription(transaction.getDescription());
-//        transactionResponse.setCategory(transaction.getCategory());
-//        transactionResponse.setAccountId(account.get().getId());
-//        transactionResponse.setAmount(transaction.getAmount());
-
-        responseDto.setLatestTransaction(transactionResponse);
-        return responseDto;
+        return transactionMapper.transactionToTransactionresponse(transaction);
     }
 
     public List<TransactionResponse> getAllTransactionsByAccountId(Long accountId) {
-        Account account =  accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+        Optional<Account> account = accountRepo.findById(accountId);
 
-        List<TransactionResponse> transactionResponses = account.getTransactions().stream().map(transaction -> {
+        List<TransactionResponse> transactionResponses = account.get().getTransactions().stream().map(transaction -> {
             TransactionResponse dto = new TransactionResponse();
-            dto.setAccountId(account.getId());
-            dto.setAmount(transaction.getAmount());
-            dto.setType(transaction.getType());
-            dto.setDescription(transaction.getDescription());
-            dto.setCategory(transaction.getCategory());
+            transactionMapper.transactionToTransactionresponse(transaction);
             return dto;
         }).toList();
 

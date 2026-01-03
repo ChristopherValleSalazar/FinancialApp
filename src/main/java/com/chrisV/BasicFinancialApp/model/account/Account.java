@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@ToString(exclude = "user")
+@ToString(exclude = {"user", "transactions", "checkingAccountDetails"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

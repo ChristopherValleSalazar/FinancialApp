@@ -15,6 +15,5 @@ public class TransactionResponse {
     private TransactionType type;
     private String description;
     private String category;
-    private Long accountId; //might delete later
     private BigDecimal amount;
 }
