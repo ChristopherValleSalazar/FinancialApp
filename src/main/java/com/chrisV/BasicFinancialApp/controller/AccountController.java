@@ -25,13 +25,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    //TODO: Delete these injection only testing cause I'm stupid and don't on the testing classes
-    @Autowired
-    private AccountBaseMapper accountMapper;
-
-    @Autowired
-    private AccountRepo repo;
-
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
         AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " is not a checking account"));
@@ -39,25 +32,10 @@ public class AccountController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
-    //TODO: fix this cause its shit
+    //TODO: improve in the future with a token for secure look up of transaction per user account
     @GetMapping("/{accountId}/transactions")
     public ResponseEntity<List<TransactionResponse>> getAccountWithTransactions(@PathVariable Long accountId) {
         return new ResponseEntity<>(accountService.getAllTransactionsByAccountId(accountId), HttpStatus.OK);
-
-
-
-//        Account account = repo.findById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " not found"));
-//
-//        AccountResponseTransactionDto dto = new AccountResponseTransactionDto();
-//
-//        dto.setBalance(account.getBalance());
-//        dto.setBankName(account.getBankName());
-////        dto.setNotes(account.getNotes());
-//        dto.setNickname(account.getNickname());
-////        dto.setTransactions(account.getTransactions());
-//
-//        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/createTransaction")

@@ -7,6 +7,7 @@ import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
 import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
+import com.chrisV.BasicFinancialApp.mapper.TransactionMapper;
 import com.chrisV.BasicFinancialApp.model.account.Account;
 import com.chrisV.BasicFinancialApp.model.account.AccountType;
 import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
@@ -32,6 +33,9 @@ public class AccountService {
 
     @Autowired
     AccountMapper accountMapper;
+
+    @Autowired
+    TransactionMapper transactionMapper;
 
     //TODO: make more generic for different account types
 //    @Transactional(readOnly = true)
@@ -106,14 +110,12 @@ public class AccountService {
     @Transactional
     public AccountResponseTransactionDto createTransaction(TransactionRequest transactionDto) {
         Optional<Account> account = accountRepo.findById(transactionDto.getFromAccountId());
-        if(account == null) {
-            throw new RuntimeException("Account not found with id: " + transactionDto.getFromAccountId());
-        }
 
         //TODO: handle this on separate mapper class
         Transaction transaction = new Transaction();
-
-        transaction.setAccount(account.orElse(null));
+//        transaction = transactionMapper.dtoToEntity(account.get(), transactionDto);
+//
+//        transaction.setAccount(account.orElse(null));
         transaction.setAmount(transactionDto.getAmount());
         transaction.setType(transactionDto.getType());
         transaction.setDescription(transactionDto.getDescription());
@@ -125,16 +127,20 @@ public class AccountService {
         accountRepo.save(account.get());
 
         AccountResponseTransactionDto responseDto = new AccountResponseTransactionDto();
-        responseDto.setBalance(account.get().getBalance());
-        responseDto.setBankName(account.get().getBankName());
-        responseDto.setNickname(account.get().getNickname());
+        responseDto = transactionMapper.entityToDto(account.get());
+
+//        responseDto.setBalance(account.get().getBalance());
+//        responseDto.setBankName(account.get().getBankName());
+//        responseDto.setNickname(account.get().getNickname());
 
         TransactionResponse transactionResponse = new TransactionResponse();
-        transactionResponse.setType(transaction.getType());
-        transactionResponse.setDescription(transaction.getDescription());
-        transactionResponse.setCategory(transaction.getCategory());
-        transactionResponse.setAccountId(account.get().getId());
-        transactionResponse.setAmount(transaction.getAmount());
+        transactionResponse = transactionMapper.transactionToTransactionresponse(transaction);
+
+//        transactionResponse.setType(transaction.getType());
+//        transactionResponse.setDescription(transaction.getDescription());
+//        transactionResponse.setCategory(transaction.getCategory());
+//        transactionResponse.setAccountId(account.get().getId());
+//        transactionResponse.setAmount(transaction.getAmount());
 
         responseDto.setLatestTransaction(transactionResponse);
         return responseDto;

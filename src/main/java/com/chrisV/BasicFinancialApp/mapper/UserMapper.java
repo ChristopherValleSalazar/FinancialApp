@@ -7,8 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring") //TODO: make all places where this is use into a spring bean injection type implementation
 public interface UserMapper {
 
-//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class); //singleton instance
-
     //implementing mapStruct preventing boilerplate code
     UserUpdateNameDTO userToUserUpdateNameDTO(User user); //TODO: In UserMapper
     UserUpdateUsernameDTO userToUserUpdateUsernameDTO(User user); //TODO: In UserMapper
@@ -21,9 +19,6 @@ public interface UserMapper {
 
 
     //UserLoginDTO userToUserLoginDTO(User user); //TODO: In AuthService
-
-
-//start learning how to implement MapStruct into the account mapping with nested objects.
 
 
 }
