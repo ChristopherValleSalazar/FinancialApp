@@ -39,7 +39,7 @@ public class AccountController {
     }
 
     @PostMapping("/createTransaction")
-    public ResponseEntity<AccountResponseTransactionDto> createTransaction(@RequestBody TransactionRequest transactionDto) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionRequest transactionDto) {
         return new ResponseEntity<>(accountService.createTransaction(transactionDto), HttpStatus.OK);
     }
 

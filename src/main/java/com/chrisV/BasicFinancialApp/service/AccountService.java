@@ -2,7 +2,6 @@ package com.chrisV.BasicFinancialApp.service;
 
 import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseTransactionDto;
 import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,27 +111,73 @@ public class AccountService {
     public TransactionResponse createTransaction(TransactionRequest transactionDto) {
         Optional<Account> account = accountRepo.findById(transactionDto.getFromAccountId());
 
-        //TODO: handle this on separate mapper class
         Transaction transaction =  transactionMapper.dtoToEntity(transactionDto);
         transaction.setAccount(account.get());
 
         //Make better after
         account.get().getTransactions().add(transaction);
-        account.get().setBalance((account.get().getBalance()).add(transactionDto.getType() == TransactionType.EXPENSE ? transaction.getAmount().negate() : transaction.getAmount()));
+        account.get().setBalance(calculateNewBalance(account.get().getBalance(), transaction.getAmount(), transaction.getType()));
         accountRepo.save(account.get());
 
         return transactionMapper.transactionToTransactionresponse(transaction);
     }
 
+    //temporary return String
+    //TODO: improve handling of insufficient funds
+    //Method somehow should notify user of insufficient funds and allow them to accept fees or cancel transaction
+    //even better allow the user to set preferences for insufficient funds that should match their bank account settings
+    //that way its only a notification about the fee, and telling them their transaction will go through with the fee
+
+//    private String feeConfirmMessage(BigDecimal currBalance, BigDecimal amount) {
+//
+//    }
+
+    //notify if insufficient funds to user
+    private boolean isSufficientFunds(BigDecimal currBalance, BigDecimal amount) {
+        return currBalance.compareTo(amount) >= 0; //if true then currBalance is greater than currTransaction amount
+    }
+
+    private BigDecimal calculateFee(BigDecimal currBalance, BigDecimal amount) {
+        BigDecimal fee = BigDecimal.ZERO;
+
+        if(!isSufficientFunds(currBalance, amount)) { // check if currBalance is less than transaction amount
+            fee = amount.multiply(new BigDecimal("0.02")); // 2% fee
+        }
+
+        return fee;
+    }
+
+    private BigDecimal calculateNewBalance(BigDecimal currBalance, BigDecimal amount, TransactionType type) {
+        BigDecimal fee = calculateFee(currBalance, amount);
+
+        System.out.println(amount); //temporary print statement
+
+
+        if(type == TransactionType.EXPENSE) { //only invoke calculate fee if check is false
+            if (fee.compareTo(BigDecimal.ZERO) > 0) {
+                amount = amount.add(fee);
+                String message = "Insufficient funds for this transaction. A fee of " + fee.abs() + " will be applied."; // call this to notify user
+                System.out.println(message); //temporary print statement
+            }
+            currBalance = currBalance.subtract(amount);
+            System.out.println(amount); //temporary print statement
+        }
+
+        else if(type == TransactionType.INCOME) {
+            currBalance = currBalance.add(amount);
+        }
+        System.out.println(amount); //temporary print statement
+        return currBalance;
+    }
+
+    @Transactional(readOnly = true)
     public List<TransactionResponse> getAllTransactionsByAccountId(Long accountId) {
         Optional<Account> account = accountRepo.findById(accountId);
 
         List<TransactionResponse> transactionResponses = account.get().getTransactions().stream().map(transaction -> {
-            TransactionResponse dto = new TransactionResponse();
-            transactionMapper.transactionToTransactionresponse(transaction);
+            TransactionResponse dto = transactionMapper.transactionToTransactionresponse(transaction);
             return dto;
         }).toList();
-
         return transactionResponses;
     }
 }

@@ -1,6 +1,5 @@
 package com.chrisV.BasicFinancialApp.mapper;
 
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseTransactionDto;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
 import com.chrisV.BasicFinancialApp.model.account.Account;
@@ -15,7 +14,6 @@ public interface TransactionMapper {
     @Mapping(target = "id", ignore = true)
     Transaction dtoToEntity(TransactionRequest transactionDto);
 
-    AccountResponseTransactionDto entityToDto(Account account);
     TransactionResponse transactionToTransactionresponse(Transaction transaction);
 
 

@@ -4,12 +4,11 @@ import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
 import com.chrisV.BasicFinancialApp.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +29,9 @@ public class Account {
     private AccountType accountType;
 
     private String bankName;
+
+    @ColumnDefault("0.00")
+    //TODO: Ensure balance can't be alter from anything but specific methods in account Service
     private BigDecimal balance;
 
     private String notes;
