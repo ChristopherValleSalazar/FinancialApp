@@ -24,11 +24,10 @@ public class Transaction {
     private TransactionType type;
     private BigDecimal amount;
     private String description;
+    private String category;
 
     @CreationTimestamp
     private LocalDateTime timestamp;
-
-    private String category;
 
     @ManyToOne(optional = true, cascade = CascadeType.ALL)
     private Account account;
