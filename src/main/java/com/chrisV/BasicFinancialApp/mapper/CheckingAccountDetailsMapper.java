@@ -2,7 +2,7 @@ package com.chrisV.BasicFinancialApp.mapper;
 
 import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountRequest;
 import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
-import com.chrisV.BasicFinancialApp.model.CheckingAccountDetails;
+import com.chrisV.BasicFinancialApp.model.account.CheckingAccountDetails;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

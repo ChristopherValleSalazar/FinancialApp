@@ -1,4 +1,4 @@
-package com.chrisV.BasicFinancialApp.model;
+package com.chrisV.BasicFinancialApp.model.account;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

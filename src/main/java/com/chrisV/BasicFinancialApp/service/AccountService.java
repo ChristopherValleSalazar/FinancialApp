@@ -1,12 +1,16 @@
 package com.chrisV.BasicFinancialApp.service;
 
-import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
+import com.chrisV.BasicFinancialApp.dto.account.*;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
+import com.chrisV.BasicFinancialApp.mapper.AccountBaseMapper;
 import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
-import com.chrisV.BasicFinancialApp.model.Account;
-import com.chrisV.BasicFinancialApp.model.AccountType;
-import com.chrisV.BasicFinancialApp.model.User;
+import com.chrisV.BasicFinancialApp.mapper.TransactionMapper;
+import com.chrisV.BasicFinancialApp.model.account.Account;
+import com.chrisV.BasicFinancialApp.model.account.AccountType;
+import com.chrisV.BasicFinancialApp.model.account.Transaction;
+import com.chrisV.BasicFinancialApp.model.transaction.TransactionType;
+import com.chrisV.BasicFinancialApp.model.user.User;
 import com.chrisV.BasicFinancialApp.repository.AccountRepo;
 import com.chrisV.BasicFinancialApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +30,23 @@ public class AccountService {
     AccountRepo accountRepo;
 
     @Autowired
+    AccountBaseMapper accountBaseMapper;
+
+    @Autowired
     AccountMapper accountMapper;
 
+    @Autowired
+    TransactionMapper transactionMapper;
+
+    //TODO: make more generic for different account types
+//    @Transactional(readOnly = true)
     public AccountResponseDTO addCheckingAccountToUser(Long userId, AccountRequestDTO accountDTO) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
         Account accountEntity = accountMapper.fromRequestDtoToEntity(accountDTO);
 
         // set bidirectional relationship
-        accountEntity.setUser(user);
+//        accountEntity.setUser(user);
         user.addAccount(accountEntity);
         repo.save(user);
         return accountMapper.fromEntityToResponseDTO(accountEntity);
@@ -70,7 +82,7 @@ public class AccountService {
         return null;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AccountResponseDTO updateAccount(Long accountId, AccountUpdateRequestDTO accountRequestDTO) {
         Account existingAccount = accountRepo.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
@@ -78,21 +90,38 @@ public class AccountService {
         //TODO: figure out how to handle account type changes properly
         //TODO: figure out how to remove these null checks with mapstruct
 
-        // Update fields
-        if(accountRequestDTO.getAccountType() != null) {
-            existingAccount.setAccountType(accountRequestDTO.getAccountType());
-        }
-        if(accountRequestDTO.getBankName() != null) {
-            existingAccount.setBankName(accountRequestDTO.getBankName());
-        }
-        if(accountRequestDTO.getNickname() != null) {
-            existingAccount.setNickname(accountRequestDTO.getNickname());
-        }
-        if(accountRequestDTO.getNotes() != null) {
-            existingAccount.setNotes(accountRequestDTO.getNotes());
-        }
+        accountBaseMapper.updateAccountFromDto(accountRequestDTO, existingAccount);
 
         accountRepo.save(existingAccount);
         return accountMapper.fromEntityToResponseDTO(existingAccount);
+    }
+
+    @Transactional
+    public TransactionResponse createTransaction(TransactionRequest transactionDto) {
+        Optional<Account> account = accountRepo.findById(transactionDto.getFromAccountId());
+
+        Transaction transaction =  transactionMapper.dtoToEntity(transactionDto);
+        account.get().addTransaction(transaction);
+
+        if(transaction.getType() == TransactionType.EXPENSE) {
+            account.get().applyExpense(transaction.getAmount());
+        }
+        else if(transaction.getType() == TransactionType.INCOME) {
+            account.get().applyIncome(transaction.getAmount());
+        }
+
+        accountRepo.save(account.get());
+        return transactionMapper.transactionToTransactionresponse(transaction);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> getAllTransactionsByAccountId(Long accountId) {
+        Optional<Account> account = accountRepo.findById(accountId);
+
+        List<TransactionResponse> transactionResponses = account.get().getTransactions().stream().map(transaction -> {
+            TransactionResponse dto = transactionMapper.transactionToTransactionresponse(transaction);
+            return dto;
+        }).toList();
+        return transactionResponses;
     }
 }

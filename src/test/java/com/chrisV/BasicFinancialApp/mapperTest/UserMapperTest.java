@@ -1,10 +1,10 @@
 package com.chrisV.BasicFinancialApp.mapperTest;
 
 import com.chrisV.BasicFinancialApp.mapper.UserMapper;
-import com.chrisV.BasicFinancialApp.model.Account;
-import com.chrisV.BasicFinancialApp.model.AccountType;
-import com.chrisV.BasicFinancialApp.model.CheckingAccountDetails;
-import com.chrisV.BasicFinancialApp.model.User;
+import com.chrisV.BasicFinancialApp.model.account.Account;
+import com.chrisV.BasicFinancialApp.model.account.AccountType;
+import com.chrisV.BasicFinancialApp.model.account.CheckingAccountDetails;
+import com.chrisV.BasicFinancialApp.model.user.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

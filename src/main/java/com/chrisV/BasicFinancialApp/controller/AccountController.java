@@ -1,9 +1,8 @@
 package com.chrisV.BasicFinancialApp.controller;
 
-import com.chrisV.BasicFinancialApp.dto.account.AccountRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountResponseDTO;
-import com.chrisV.BasicFinancialApp.dto.account.AccountUpdateRequestDTO;
-import com.chrisV.BasicFinancialApp.dto.account.CheckingAccountResponse;
+import com.chrisV.BasicFinancialApp.dto.account.*;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
+import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
 import com.chrisV.BasicFinancialApp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,18 @@ public class AccountController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    //TODO: improve in the future with a token for secure look up of transaction per user account
+    @GetMapping("/{accountId}/transactions")
+    public ResponseEntity<List<TransactionResponse>> getAccountWithTransactions(@PathVariable Long accountId) {
+        return new ResponseEntity<>(accountService.getAllTransactionsByAccountId(accountId), HttpStatus.OK);
+    }
+
+    @PostMapping("/createTransaction")
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionRequest transactionDto) {
+        return new ResponseEntity<>(accountService.createTransaction(transactionDto), HttpStatus.OK);
+    }
+
+    // TODO: restrict Balance to $0 during creation for better handling with expense and income endpoints
     @PostMapping("/{userId}/checking")
     public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody AccountRequestDTO account) {
         AccountResponseDTO dto = accountService.addCheckingAccountToUser(userId, account);
@@ -46,12 +57,15 @@ public class AccountController {
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
 
-    @PatchMapping("{userId}/updateAccount/{accountId}")
-    public ResponseEntity<AccountResponseDTO> updateAccount(@PathVariable Long userId, @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
+    @PatchMapping("updateAccount/{accountId}")
+    public ResponseEntity<AccountResponseDTO> updateAccount( @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
         AccountResponseDTO updatedAccount = accountService.updateAccount(accountId, accountRequestDTO);
-
-        System.out.println(updatedAccount);
-
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
+
+
+
+
+
+
 }

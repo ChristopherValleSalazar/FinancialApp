@@ -1,6 +1,6 @@
 package com.chrisV.BasicFinancialApp.dto.account;
 
-import com.chrisV.BasicFinancialApp.model.AccountType;
+import com.chrisV.BasicFinancialApp.model.account.AccountType;
 import lombok.*;
 
 import java.math.BigDecimal;
