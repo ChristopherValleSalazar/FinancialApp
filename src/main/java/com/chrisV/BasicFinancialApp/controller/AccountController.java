@@ -57,8 +57,8 @@ public class AccountController {
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
 
-    @PatchMapping("{userId}/updateAccount/{accountId}")
-    public ResponseEntity<AccountResponseDTO> updateAccount(@PathVariable Long userId, @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
+    @PatchMapping("updateAccount/{accountId}")
+    public ResponseEntity<AccountResponseDTO> updateAccount( @PathVariable Long accountId, @RequestBody AccountUpdateRequestDTO accountRequestDTO) {
         AccountResponseDTO updatedAccount = accountService.updateAccount(accountId, accountRequestDTO);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
