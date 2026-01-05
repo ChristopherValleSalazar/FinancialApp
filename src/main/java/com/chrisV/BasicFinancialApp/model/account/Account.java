@@ -1,23 +1,20 @@
 package com.chrisV.BasicFinancialApp.model.account;
 
-import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
 import com.chrisV.BasicFinancialApp.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @ToString(exclude = {"user", "transactions", "checkingAccountDetails"})
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Account {
 
@@ -25,19 +22,22 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
+    @Setter
     private String bankName;
 
-    @ColumnDefault("0.00")
-    //TODO: Ensure balance can't be alter from anything but specific methods in account Service
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
+    @Setter
     private String notes;
+
+    @Setter
     private String nickname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
@@ -51,15 +51,44 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private CheckingAccountDetails checkingAccountDetails;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account", orphanRemoval = true)
-    private List<Transaction> transactions;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactions = new ArrayList<>();
 
+    public void applyIncome(BigDecimal amount) {
+        validateAmount(amount);
+        this.balance = this.balance.add(amount);
+    }
 
-    //setter to map bidirectional relationship for CheckingAccountDetails
+    public void applyExpense(BigDecimal amount) {
+        validateAmount(amount);
+        this.balance = this.balance.subtract(amount);
+    }
+
+    public void addTransaction(Transaction transaction) {
+        if (transaction == null) {
+            throw new IllegalArgumentException("Transaction cannot be null");
+        }
+        transactions.add(transaction);
+        transaction.setAccount(this);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    private void validateAmount(BigDecimal amount) {
+        if (amount == null || amount.signum() <= 0) {
+            throw new IllegalArgumentException("Amount must be a positive value");
+        }
+    }
+
     public void setCheckingAccountDetails(CheckingAccountDetails details) {
         this.checkingAccountDetails = details;
         if(details != null) {
             details.setAccount(this);
         }
     }
+
+
 }
+
