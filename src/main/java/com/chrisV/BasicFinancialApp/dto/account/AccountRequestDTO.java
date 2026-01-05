@@ -10,14 +10,12 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 //DTO for CHECKING ACCOUNT
 public class AccountRequestDTO {
     private AccountType accountType;
     private String bankName;
     private String notes;
     private String nickname;
-    private BigDecimal balance;
     private UserRequestDTO user;
 
     // Polymorphic deserialization based on accountType

@@ -45,8 +45,6 @@ public class AccountService {
 
         Account accountEntity = accountMapper.fromRequestDtoToEntity(accountDTO);
 
-        // set bidirectional relationship
-//        accountEntity.setUser(user);
         user.addAccount(accountEntity);
         repo.save(user);
         return accountMapper.fromEntityToResponseDTO(accountEntity);
