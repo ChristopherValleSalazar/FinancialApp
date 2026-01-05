@@ -85,9 +85,6 @@ public class AccountService {
         Account existingAccount = accountRepo.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
 
-        //TODO: figure out how to handle account type changes properly
-        //TODO: figure out how to remove these null checks with mapstruct
-
         accountBaseMapper.updateAccountFromDto(accountRequestDTO, existingAccount);
 
         accountRepo.save(existingAccount);
