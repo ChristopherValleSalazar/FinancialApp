@@ -3,11 +3,6 @@ package com.chrisV.BasicFinancialApp.controller;
 import com.chrisV.BasicFinancialApp.dto.account.*;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
-import com.chrisV.BasicFinancialApp.mapper.AccountBaseMapper;
-import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
-import com.chrisV.BasicFinancialApp.model.account.Account;
-import com.chrisV.BasicFinancialApp.model.transaction.Transaction;
-import com.chrisV.BasicFinancialApp.repository.AccountRepo;
 import com.chrisV.BasicFinancialApp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
