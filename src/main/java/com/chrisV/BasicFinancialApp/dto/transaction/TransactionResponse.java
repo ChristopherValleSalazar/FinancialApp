@@ -1,5 +1,6 @@
 package com.chrisV.BasicFinancialApp.dto.transaction;
 
+import com.chrisV.BasicFinancialApp.model.transaction.TransactionCategory;
 import com.chrisV.BasicFinancialApp.model.transaction.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,6 @@ import java.math.BigDecimal;
 public class TransactionResponse {
     private TransactionType type;
     private String description;
-    private String category;
+    private TransactionCategory category;
     private BigDecimal amount;
 }
