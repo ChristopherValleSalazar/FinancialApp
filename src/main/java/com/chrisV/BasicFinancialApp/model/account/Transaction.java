@@ -31,6 +31,8 @@ public class Transaction {
     private String description;
 
     @Setter
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TransactionCategory category;
 
     @CreationTimestamp

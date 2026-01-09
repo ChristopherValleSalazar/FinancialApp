@@ -13,6 +13,7 @@ public interface TransactionMapper {
     @Mapping(target = "id", ignore = true)
     Transaction dtoToEntity(TransactionRequest transactionDto);
 
+    @Mapping(target = "category", source = "category")
     TransactionResponse transactionToTransactionresponse(Transaction transaction);
 
 
