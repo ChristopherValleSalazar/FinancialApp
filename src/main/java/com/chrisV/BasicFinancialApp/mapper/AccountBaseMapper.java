@@ -26,6 +26,6 @@ public interface AccountBaseMapper {
     //ignore fields if null in dto
     void updateAccountFromDto(AccountUpdateRequestDTO dto, @MappingTarget Account account);
 
-
+    SimpleAccountDisplayDto accountEntityToSimpleDisplayAccount(Account account);
 
 }

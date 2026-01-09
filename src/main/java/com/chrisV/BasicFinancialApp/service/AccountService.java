@@ -9,6 +9,7 @@ import com.chrisV.BasicFinancialApp.mapper.TransactionMapper;
 import com.chrisV.BasicFinancialApp.model.account.Account;
 import com.chrisV.BasicFinancialApp.model.account.AccountType;
 import com.chrisV.BasicFinancialApp.model.account.Transaction;
+import com.chrisV.BasicFinancialApp.model.transaction.TransactionCategory;
 import com.chrisV.BasicFinancialApp.model.transaction.TransactionType;
 import com.chrisV.BasicFinancialApp.model.user.User;
 import com.chrisV.BasicFinancialApp.repository.AccountRepo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +42,7 @@ public class AccountService {
 
     //TODO: make more generic for different account types
 //    @Transactional(readOnly = true)
-    public AccountResponseDTO addCheckingAccountToUser(Long userId, AccountRequestDTO accountDTO) {
+    public AccountResponseDTO addAccountToUser(Long userId, AccountRequestDTO accountDTO) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
         Account accountEntity = accountMapper.fromRequestDtoToEntity(accountDTO);
@@ -118,5 +120,36 @@ public class AccountService {
             return dto;
         }).toList();
         return transactionResponses;
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalBalanceByUserIdAndAccountType(Long userId, AccountType accountType) {
+        //TODO: handle invalid userId or accountType
+
+        return accountRepo.findTotalBalanceByUserIdAndAccountType(userId, accountType);
+    }
+
+    public BigDecimal getAccountBalance(Long accountId) {
+        return accountRepo.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId))
+                .getBalance();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> getAllTransactionPerCategory(Long userId, Long accountId, TransactionCategory transactionCategory) {
+        List<TransactionResponse> transactions = accountRepo.findTransactionsPerCategoryByUserIdAndAccountId(userId, accountId, transactionCategory)
+                .stream()
+                .map(t -> transactionMapper.transactionToTransactionresponse(t))
+                .toList();
+        return transactions;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SimpleAccountDisplayDto> getAllSimpleAccountDisplayDtos(Long userId) {
+        List<SimpleAccountDisplayDto> simpleAccountDisplayDtos = accountRepo.findAllByUserId(userId)
+                .stream()
+                .map(account -> accountBaseMapper.accountEntityToSimpleDisplayAccount(account))
+                .toList();
+        return simpleAccountDisplayDtos;
     }
 }
