@@ -24,8 +24,8 @@ public class AccountController {
 
     @GetMapping("/{accountId}/checking")
     public ResponseEntity<AccountResponseDTO> getAccountInfo(@PathVariable Long accountId) {
-        AccountResponseDTO dto = accountService.findAccountById(accountId).orElseThrow(() -> new RuntimeException("Account with id " + accountId + " is not a checking account"));
-        CheckingAccountResponse checkingDetails = (CheckingAccountResponse) dto.getAccountDetails();
+        AccountResponseDTO dto = accountService.findAccountById(accountId);
+//        CheckingAccountResponse checkingDetails = (CheckingAccountResponse) dto.getAccountDetails();
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -41,6 +41,7 @@ public class AccountController {
         return new ResponseEntity<>(accountService.createTransaction(transactionDto), HttpStatus.OK);
     }
 
+    //TODO: validate userId and accountId
     @GetMapping("/{userId}/{accountId}/transactionsPerCategory/{transactionCategory}")
     public ResponseEntity<List<TransactionResponse>> getTransactionByType(
             @PathVariable Long userId,
@@ -57,7 +58,7 @@ public class AccountController {
         }
 
 
-    
+    //TODO: change to simpler account entity
     @PostMapping("/{userId}/checking")
     public ResponseEntity<AccountResponseDTO> addAccountToUser(@PathVariable Long userId, @RequestBody AccountRequestDTO account) {
         AccountResponseDTO dto = accountService.addAccountToUser(userId, account);
@@ -65,6 +66,7 @@ public class AccountController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    //TODO: change to simpler account entity
     @GetMapping("{userId}/totalBalance/{accountType}")
     public ResponseEntity<BigDecimal> getTotalBalanceByUserIdAndAccountType(@PathVariable Long userId, @PathVariable AccountType accountType) {
         BigDecimal totalBalance = accountService.getTotalBalanceByUserIdAndAccountType(userId, accountType);
@@ -78,6 +80,7 @@ public class AccountController {
         return new ResponseEntity<>(balance, HttpStatus.OK);
     }
 
+    //TODO: change to simpler account entity
     @GetMapping("{userId}/AllChecking")
     public ResponseEntity<List<AccountResponseDTO>> getAllCheckingAccountsByUserId(@PathVariable Long userId) {
         List<AccountResponseDTO> accounts = accountService.getAllCheckingAccountsByUserId(userId);
@@ -95,10 +98,5 @@ public class AccountController {
         AccountResponseDTO updatedAccount = accountService.updateAccount(accountId, accountRequestDTO);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
-
-
-
-
-
 
 }

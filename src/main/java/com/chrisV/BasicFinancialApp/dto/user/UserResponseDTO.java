@@ -3,7 +3,6 @@ package com.chrisV.BasicFinancialApp.dto.user;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 
 // Simple user with no sensitive info

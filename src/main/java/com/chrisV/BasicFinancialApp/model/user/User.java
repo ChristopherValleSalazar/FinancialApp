@@ -11,7 +11,6 @@ import java.util.List;
 @Data
 @ToString(exclude = {"password", "accounts"})
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {

@@ -17,14 +17,4 @@ public class AccountRequestDTO {
     private String notes;
     private String nickname;
     private UserRequestDTO user;
-
-    // Polymorphic deserialization based on accountType
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
-            property = "accountType",
-            visible = false)
-    @JsonSubTypes({
-            @JsonSubTypes.Type(value = CheckingAccountRequest.class, name = "CHECKING")
-    })
-    private AccountDetails accountDetails;
 }

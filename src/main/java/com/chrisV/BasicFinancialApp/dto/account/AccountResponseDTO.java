@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AccountResponseDTO {
     private AccountType accountType;
     private BigDecimal balance;
@@ -15,5 +14,5 @@ public class AccountResponseDTO {
     private String notes;
     private String nickname;
 
-    private AccountDetails accountDetails;
+//    private AccountDetails accountDetails;
 }

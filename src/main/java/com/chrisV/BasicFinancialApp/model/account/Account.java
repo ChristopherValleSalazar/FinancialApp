@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@ToString(exclude = {"user", "transactions", "checkingAccountDetails"})
+@ToString(exclude = {"user", "transactions"})
 @NoArgsConstructor
 @Entity
 public class Account {
@@ -48,9 +48,6 @@ public class Account {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private CheckingAccountDetails checkingAccountDetails;
-
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -81,14 +78,5 @@ public class Account {
             throw new IllegalArgumentException("Amount must be a positive value");
         }
     }
-
-    public void setCheckingAccountDetails(CheckingAccountDetails details) {
-        this.checkingAccountDetails = details;
-        if(details != null) {
-            details.setAccount(this);
-        }
-    }
-
-
 }
 

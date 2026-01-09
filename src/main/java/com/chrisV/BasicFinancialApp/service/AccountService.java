@@ -4,7 +4,6 @@ import com.chrisV.BasicFinancialApp.dto.account.*;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionRequest;
 import com.chrisV.BasicFinancialApp.dto.transaction.TransactionResponse;
 import com.chrisV.BasicFinancialApp.mapper.AccountBaseMapper;
-import com.chrisV.BasicFinancialApp.mapper.AccountMapper;
 import com.chrisV.BasicFinancialApp.mapper.TransactionMapper;
 import com.chrisV.BasicFinancialApp.model.account.Account;
 import com.chrisV.BasicFinancialApp.model.account.AccountType;
@@ -35,31 +34,25 @@ public class AccountService {
     AccountBaseMapper accountBaseMapper;
 
     @Autowired
-    AccountMapper accountMapper;
-
-    @Autowired
     TransactionMapper transactionMapper;
 
     //TODO: make more generic for different account types
-//    @Transactional(readOnly = true)
+    @Transactional
     public AccountResponseDTO addAccountToUser(Long userId, AccountRequestDTO accountDTO) {
         User user = repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        Account accountEntity = accountMapper.fromRequestDtoToEntity(accountDTO);
-
+        Account accountEntity = accountBaseMapper.fromRequestDtoToEntity(accountDTO);
         user.addAccount(accountEntity);
         repo.save(user);
-        return accountMapper.fromEntityToResponseDTO(accountEntity);
+
+        return accountBaseMapper.entityToAccountResponseDto(accountEntity);
+
     }
 
     @Transactional(readOnly = true)
-    public Optional<AccountResponseDTO> findAccountById(Long id) {
-        return accountRepo.findByIdWithCheckingDetails(id)
-                .map(this::toDto); // map Account entity to AccountResponseDTO
-    }
-
-    private AccountResponseDTO toDto(Account entity) {
-        return accountMapper.fromEntityToResponseDTO(entity);
+    public AccountResponseDTO findAccountById(Long id) {
+        Account account = accountRepo.findById(id).orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+        return accountBaseMapper.entityToAccountResponseDto(account);
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +60,7 @@ public class AccountService {
         return accountRepo.findAllByUserId(userId)
                 .stream()
                 .filter(dto -> dto.getAccountType() == AccountType.CHECKING)
-                .map(account -> accountMapper.fromEntityToResponseDTO(account))
+                .map(account -> accountBaseMapper.entityToAccountResponseDto(account))
                 .toList();
 
     }
@@ -77,7 +70,7 @@ public class AccountService {
         Account account = accountRepo.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
 
         if (account != null && account.getUser().getId().equals(userId)) {
-            return accountMapper.fromEntityToResponseDTO(accountRepo.deleteByIdAndUserId(accountId, userId)); //TODO: return a simpler dto since its a deletion
+            return accountBaseMapper.entityToAccountResponseDto(accountRepo.deleteByIdAndUserId(accountId, userId)); //TODO: return a simpler dto since its a deletion
         }
         return null;
     }
@@ -90,24 +83,28 @@ public class AccountService {
         accountBaseMapper.updateAccountFromDto(accountRequestDTO, existingAccount);
 
         accountRepo.save(existingAccount);
-        return accountMapper.fromEntityToResponseDTO(existingAccount);
+        return accountBaseMapper.entityToAccountResponseDto(existingAccount);
     }
 
     @Transactional
     public TransactionResponse createTransaction(TransactionRequest transactionDto) {
         Optional<Account> account = accountRepo.findById(transactionDto.getFromAccountId());
 
-        Transaction transaction =  transactionMapper.dtoToEntity(transactionDto);
-        account.get().addTransaction(transaction);
+        Transaction transaction = null;
+        
+        if(account.isPresent()) {
+            transaction =  transactionMapper.dtoToEntity(transactionDto);
+            account.get().addTransaction(transaction);
 
-        if(transaction.getType() == TransactionType.EXPENSE) {
-            account.get().applyExpense(transaction.getAmount());
-        }
-        else if(transaction.getType() == TransactionType.INCOME) {
-            account.get().applyIncome(transaction.getAmount());
+            if(transaction.getType() == TransactionType.EXPENSE) {
+                account.get().applyExpense(transaction.getAmount());
+            }
+            else if(transaction.getType() == TransactionType.INCOME) {
+                account.get().applyIncome(transaction.getAmount());
+            }
+            accountRepo.save(account.get());
         }
 
-        accountRepo.save(account.get());
         return transactionMapper.transactionToTransactionresponse(transaction);
     }
 

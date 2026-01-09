@@ -16,11 +16,6 @@ import java.util.Optional;
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Long> {
 
-    @Query("SELECT a from Account a " +
-           "LEFT JOIN FETCH a.checkingAccountDetails cd " +
-            "Where a.id = :id")
-    Optional<Account> findByIdWithCheckingDetails(@Param("id") Long id);
-
     List<Account> findAllByUserId(Long userId);
     Account deleteByIdAndUserId(Long accountId, Long userId);
 
@@ -39,6 +34,6 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
     List<Transaction> findTransactionsPerCategoryByUserIdAndAccountId(@Param("userId") Long userId, @Param("accountId") Long accountId, @Param("transactionCategory") TransactionCategory transactionCategory);
 
 
-    //TODO: Create custome query to get simple account display information instead of querying for the whole account info
+    //TODO: Create custom query to get simple account display information instead of querying for the whole account info
 
 }
